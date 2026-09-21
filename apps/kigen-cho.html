@@ -1,0 +1,192 @@
+<title>きげん帳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --bg:#F1F2EE; --surface:#FFFFFF; --surface-2:#F7F8F4;
+    --ink:#1E211C; --muted:#6A6F63; --line:#D7D9D1; --line-strong:#B9BDB1;
+    --accent:#2E7D6B; --accent-ink:#FFFFFF; --accent-soft:#DFEFEA;
+    --ok:#3C7A4C; --ok-soft:#E3F0E6; --warn:#B57A1E; --warn-soft:#F8EEDB; --bad:#B03A2E; --bad-soft:#F7E3E0;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --bg:#171913; --surface:#1F221B; --surface-2:#262A21;
+      --ink:#ECEDE5; --muted:#9AA091; --line:#30342B; --line-strong:#464B3F;
+      --accent:#7CC4B2; --accent-ink:#0B1F1A; --accent-soft:#1E3630;
+      --ok:#7FB98C; --ok-soft:#1F2E23; --warn:#E0B25A; --warn-soft:#332A15; --bad:#E58A7E; --bad-soft:#38201D;
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#171913; --surface:#1F221B; --surface-2:#262A21;
+    --ink:#ECEDE5; --muted:#9AA091; --line:#30342B; --line-strong:#464B3F;
+    --accent:#7CC4B2; --accent-ink:#0B1F1A; --accent-soft:#1E3630;
+    --ok:#7FB98C; --ok-soft:#1F2E23; --warn:#E0B25A; --warn-soft:#332A15; --bad:#E58A7E; --bad-soft:#38201D;
+    color-scheme:dark;
+  }
+  body{background:var(--bg);color:var(--ink);font-family:"Zen Kaku Gothic New",system-ui,-apple-system,"Hiragino Sans",sans-serif;font-size:16px;line-height:1.65;-webkit-text-size-adjust:100%}
+  .wrap{max-width:640px;margin-inline:auto;padding-inline:16px;padding-block:24px 72px;display:flex;flex-direction:column;gap:20px}
+  .mono{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
+  header{display:flex;flex-direction:column;gap:6px}
+  .eyebrow{font-size:12px;letter-spacing:.12em;color:var(--muted);font-weight:500}
+  h1{margin:0;font-size:30px;line-height:1.15;font-weight:700;text-wrap:balance}
+  .lede{margin:0;color:var(--muted);font-size:14px}
+
+  .quick{background:var(--surface);border:2px solid var(--accent);border-radius:12px;padding:14px;display:grid;grid-template-columns:1fr 130px auto;gap:10px;align-items:end}
+  @media (max-width:480px){.quick{grid-template-columns:1fr 1fr}.quick .add{grid-column:1/-1}}
+  .quick label{font-size:12.5px;color:var(--muted);display:block;margin-bottom:4px}
+  input,select{font:inherit;font-size:16px;color:var(--ink);background:var(--surface-2);border:1px solid var(--line-strong);border-radius:8px;padding:11px 12px;width:100%;box-sizing:border-box}
+  input:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+  .add{font:inherit;font-weight:700;font-size:16px;padding:12px 18px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer;white-space:nowrap}
+  .add:focus-visible,.ghost:focus-visible,.seg button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+  .seg{display:flex;gap:6px;flex-wrap:wrap}
+  .seg button{font:inherit;font-size:13.5px;padding:8px 12px;border-radius:999px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);cursor:pointer}
+  .seg button[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:700}
+  .stats{display:flex;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+  .stats b{color:var(--ink)}
+
+  .list{display:flex;flex-direction:column;gap:8px}
+  .item{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center}
+  .dot{width:12px;height:12px;border-radius:50%;background:var(--ok)}
+  .item.warn .dot{background:var(--warn)} .item.bad .dot{background:var(--bad)}
+  .item .name{font-weight:700;font-size:16.5px;overflow-wrap:anywhere}
+  .item .sub{font-size:13px;color:var(--muted)}
+  .item.bad .sub{color:var(--bad);font-weight:700}
+  .item.warn .sub{color:var(--warn);font-weight:700}
+  .done{font:inherit;font-size:13px;padding:8px 12px;border-radius:8px;border:1px solid var(--line-strong);background:var(--surface-2);color:var(--ink);cursor:pointer;white-space:nowrap}
+  .done.trash{color:var(--bad)}
+  .ghost{font:inherit;font-size:14px;padding:10px 14px;border-radius:8px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);cursor:pointer}
+  .ghost.danger{color:var(--bad);border-color:var(--bad)}
+  .row-actions{display:flex;gap:8px;flex-wrap:wrap}
+  .example-tag{font-size:11px;letter-spacing:.08em;color:var(--muted);border:1px dashed var(--line-strong);border-radius:4px;padding:1px 6px}
+  .empty{border:1px dashed var(--line-strong);border-radius:10px;padding:18px 16px;color:var(--muted);font-size:14px;background:var(--surface-2)}
+  .toast{min-height:1.4em;font-size:13.5px;color:var(--ok)} .toast.err{color:var(--bad)}
+  .field{display:flex;flex-direction:column;gap:5px} .field label{font-size:13px;color:var(--muted)}
+  textarea{font:inherit;font-size:15px;color:var(--ink);background:var(--surface-2);border:1px solid var(--line-strong);border-radius:8px;padding:10px;width:100%;box-sizing:border-box;min-height:60px}
+  .hint{font-size:12.5px;color:var(--muted);margin:0}
+  details{border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+  summary{cursor:pointer;padding:12px 16px;font-weight:700;list-style:none}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"＋ ";color:var(--muted)} details[open] summary::before{content:"－ "}
+  details .inner{padding:0 16px 16px;display:flex;flex-direction:column;gap:12px}
+  footer{border-top:1px solid var(--line);padding-top:14px;color:var(--muted);font-size:13px;display:flex;flex-direction:column;gap:6px}
+  footer strong{color:var(--ink)}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">冷蔵庫と食品庫の、いつまで</div>
+    <h1>きげん帳</h1>
+    <p class="lede">品名と日付だけ。3秒で入れて、期限の近いものが上に出る。食べたら1回押すだけ。</p>
+  </header>
+
+  <div class="quick">
+    <div><label for="q-name">品名</label><input id="q-name" placeholder="例: 牛乳 / 豚こま / 納豆" autocomplete="off"></div>
+    <div><label for="q-date">期限</label><input id="q-date" type="date"></div>
+    <button class="add" id="q-add">入れる</button>
+  </div>
+  <div class="seg" id="place" role="group" aria-label="保存場所">
+    <button aria-pressed="true" data-v="冷蔵">冷蔵</button><button aria-pressed="false" data-v="冷凍">冷凍</button><button aria-pressed="false" data-v="常温">常温</button>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+
+  <div class="stats" id="stats"></div>
+  <div class="list" id="list"></div>
+
+  <details>
+    <summary>バックアップと復元</summary>
+    <div class="inner">
+      <p class="hint">記録はこの端末の中にだけあります。端末を替える前にバックアップを。</p>
+      <div class="row-actions"><button class="ghost" id="bk-save">バックアップを保存する</button></div>
+      <div class="field"><label for="bk-text">復元：中身を貼り付けて「読み込む」</label><textarea id="bk-text" placeholder="{ ... }"></textarea></div>
+      <div class="row-actions"><button class="ghost" id="bk-load">読み込む</button><button class="ghost danger" id="bk-clear">全部消す</button></div>
+      <div class="toast" id="bk-toast" role="status"></div>
+    </div>
+  </details>
+
+  <footer>
+    <div><strong>このアプリについて。</strong>記録はあなたの端末の中にだけ。どこにも送られません。</div>
+    <div>「食べた」「捨てた」を押すと一覧から消えて、今月の捨てた数だけ残ります。数字は責めるためではなく、買う量の目安に。</div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var KEY="kigen-cho-v1";
+  var $=function(id){return document.getElementById(id);};
+  var state={items:[],log:[]};
+  function today(){var d=new Date();d.setHours(0,0,0,0);return d;}
+  function iso(d){var p=function(n){return (n<10?"0":"")+n;};return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate());}
+  function load(){ try{var raw=localStorage.getItem(KEY); if(raw){var d=JSON.parse(raw); if(d&&Array.isArray(d.items)){state=d; state.log=state.log||[]; return;}}}catch(e){} state={items:seed(),log:[]}; }
+  function save(){ try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){toast("保存できませんでした",true);} }
+  function seed(){ var t=today(); var a=new Date(t);a.setDate(a.getDate()+2); var b=new Date(t);b.setDate(b.getDate()+9);
+    return [{id:"ex1",name:"牛乳（例）",date:iso(a),place:"冷蔵",ex:true},{id:"ex2",name:"冷凍うどん（例）",date:iso(b),place:"冷凍",ex:true}]; }
+  function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+  function esc(s){return String(s||"").replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+  function days(it){ var p=it.date.split("-").map(Number); var d=new Date(p[0],p[1]-1,p[2]); return Math.round((d-today())/86400000); }
+  var toastEl=$("toast"); function toast(m,e){toastEl.className="toast"+(e?" err":"");toastEl.textContent=m;}
+
+  var place="冷蔵";
+  $("place").addEventListener("click",function(ev){ var b=ev.target.closest("button[data-v]"); if(!b) return; place=b.dataset.v;
+    Array.prototype.forEach.call($("place").querySelectorAll("button"),function(x){x.setAttribute("aria-pressed",String(x===b));}); });
+  function resetQuick(){ var d=new Date(today()); d.setDate(d.getDate()+7); $("q-date").value=iso(d); $("q-name").value=""; }
+  function addQuick(){
+    var name=$("q-name").value.trim(), date=$("q-date").value;
+    if(!name){toast("品名を入れてください",true);$("q-name").focus();return;}
+    if(!date){toast("期限を入れてください",true);return;}
+    state.items.push({id:uid(),name:name,date:date,place:place,ex:false}); save(); render(); toast("「"+name+"」を入れました"); resetQuick(); $("q-name").focus();
+  }
+  $("q-add").addEventListener("click",addQuick);
+  $("q-name").addEventListener("keydown",function(e){ if(e.key==="Enter"){e.preventDefault();$("q-date").focus();} });
+  $("q-date").addEventListener("keydown",function(e){ if(e.key==="Enter"){e.preventDefault();addQuick();} });
+
+  function render(){
+    var items=state.items.slice().sort(function(a,b){return days(a)-days(b);});
+    var ym=iso(today()).slice(0,7);
+    var trashed=state.log.filter(function(l){return l.kind==="trash"&&l.at.slice(0,7)===ym;}).length;
+    var eaten=state.log.filter(function(l){return l.kind==="eat"&&l.at.slice(0,7)===ym;}).length;
+    var bad=items.filter(function(i){return days(i)<0;}).length, soon=items.filter(function(i){var d=days(i);return d>=0&&d<=3;}).length;
+    $("stats").innerHTML='<span>登録 <b>'+items.length+'</b></span><span>期限切れ <b>'+bad+'</b></span><span>3日以内 <b>'+soon+'</b></span><span>今月 食べた <b>'+eaten+'</b> / 捨てた <b>'+trashed+'</b></span>';
+    var list=$("list"); list.innerHTML="";
+    if(!items.length){ var e=document.createElement("div"); e.className="empty"; e.textContent="空です。買ってきたものを上から3秒で入れてみてください。"; list.appendChild(e); return; }
+    items.forEach(function(it){
+      var d=days(it); var cls= d<0?"bad": d<=3?"warn":"";
+      var label= d<0?"切れて"+Math.abs(d)+"日": d===0?"今日まで": d===1?"明日まで": "あと"+d+"日";
+      var el=document.createElement("div"); el.className="item "+cls;
+      el.innerHTML='<span class="dot" aria-hidden="true"></span><div><div class="name">'+esc(it.name)+(it.ex?' <span class="example-tag">例</span>':'')+'</div><div class="sub"><span class="mono">'+esc(it.date.slice(5).replace("-","/"))+'</span>　'+label+'　<span style="color:var(--muted);font-weight:400">'+esc(it.place)+'</span></div></div>'+
+        '<span class="row-actions"><button class="done" data-act="eat" data-id="'+it.id+'">食べた</button><button class="done trash" data-act="trash" data-id="'+it.id+'">捨てた</button></span>';
+      list.appendChild(el);
+    });
+  }
+  $("list").addEventListener("click",function(ev){
+    var b=ev.target.closest("button[data-act]"); if(!b) return;
+    var it=state.items.find(function(i){return i.id===b.dataset.id;}); if(!it) return;
+    state.items=state.items.filter(function(i){return i.id!==it.id;});
+    if(!it.ex) state.log.push({kind:b.dataset.act,at:iso(today()),name:it.name});
+    save(); render(); toast(b.dataset.act==="eat"?"「"+it.name+"」食べました":"「"+it.name+"」捨てました。次は少し少なめに");
+  });
+
+  var bkToast=$("bk-toast"); function bt(m,e){bkToast.className="toast"+(e?" err":"");bkToast.textContent=m;}
+  var downloads=null;
+  function fallback(text){ $("bk-text").value=text; bt("この端末では直接保存できないので、下の欄に出しました。全部コピーして保管してください"); }
+  $("bk-save").addEventListener("click",function(){
+    var text=JSON.stringify({app:"kigen-cho",v:1,items:state.items.filter(function(i){return !i.ex;}),log:state.log},null,1);
+    var fn="kigen-cho-"+iso(today())+".json";
+    if(downloads){ downloads.save({filename:fn,data:text}).then(function(){bt("保存しました: "+fn);}).catch(function(){fallback(text);}); } else fallback(text);
+  });
+  $("bk-load").addEventListener("click",function(){
+    try{ var d=JSON.parse($("bk-text").value); if(!d||!Array.isArray(d.items)) throw 0;
+      var real=state.items.filter(function(i){return !i.ex;}); var ids={}; real.forEach(function(i){ids[i.id]=1;});
+      d.items.forEach(function(i){ if(!ids[i.id]) real.push(i); }); state.items=real; state.log=(state.log||[]).concat(d.log||[]); save(); render(); bt(d.items.length+"件を読み込みました"); $("bk-text").value="";
+    }catch(e){ bt("読み込めませんでした",true); }
+  });
+  $("bk-clear").addEventListener("click",function(){ if(confirm("すべての記録を消します。よろしいですか？")){state.items=[];state.log=[];save();render();bt("全部消しました");} });
+
+  load(); resetQuick(); render();
+  if(window.claude&&typeof window.claude.use==="function"){ window.claude.use("downloads").then(function(ns){downloads=ns||null;}).catch(function(){}); }
+})();
+</script>

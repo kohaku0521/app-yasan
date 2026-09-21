@@ -1,0 +1,262 @@
+<title>しゅみ帳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --bg:#F1F2EE; --surface:#FFFFFF; --surface-2:#F7F8F4;
+    --ink:#1E211C; --muted:#6A6F63; --line:#D7D9D1; --line-strong:#B9BDB1;
+    --accent:#6A3E8F; --accent-ink:#FFFFFF; --accent-soft:#EEE6F5;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --bg:#171913; --surface:#1F221B; --surface-2:#262A21;
+      --ink:#ECEDE5; --muted:#9AA091; --line:#30342B; --line-strong:#464B3F;
+      --accent:#B892DA; --accent-ink:#1E0F2A; --accent-soft:#2E2438;
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#171913; --surface:#1F221B; --surface-2:#262A21;
+    --ink:#ECEDE5; --muted:#9AA091; --line:#30342B; --line-strong:#464B3F;
+    --accent:#B892DA; --accent-ink:#1E0F2A; --accent-soft:#2E2438;
+    color-scheme:dark;
+  }
+  body{background:var(--bg);color:var(--ink);font-family:"Zen Kaku Gothic New",system-ui,-apple-system,"Hiragino Sans",sans-serif;font-size:16px;line-height:1.65;-webkit-text-size-adjust:100%}
+  .wrap{max-width:680px;margin-inline:auto;padding-inline:16px;padding-block:24px 72px;display:flex;flex-direction:column;gap:20px}
+  .mono{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
+  header{display:flex;flex-direction:column;gap:6px}
+  .eyebrow{font-size:12px;letter-spacing:.12em;color:var(--muted);font-weight:500}
+  h1{margin:0;font-size:30px;line-height:1.15;font-weight:700;text-wrap:balance}
+  .lede{margin:0;color:var(--muted);font-size:14px}
+
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .tabs button{font:inherit;font-size:14px;padding:9px 14px;border-radius:999px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);cursor:pointer}
+  .tabs button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:700}
+  .tabs button.new{border-style:dashed;color:var(--muted)}
+  .tabs button:focus-visible,.btn:focus-visible,.ghost:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+  .btn{font:inherit;font-weight:700;font-size:16px;padding:14px 18px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer;width:100%}
+  .ghost{font:inherit;font-size:14px;padding:10px 14px;border-radius:8px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);cursor:pointer}
+  .ghost.small{padding:7px 10px;font-size:13px} .ghost.danger{color:#B03A2E;border-color:#B03A2E}
+  .row-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:12px}
+  .card h2{margin:0;font-size:17px}
+  .field{display:flex;flex-direction:column;gap:5px} .field label{font-size:13px;color:var(--muted);font-weight:500}
+  input,select,textarea{font:inherit;font-size:16px;color:var(--ink);background:var(--surface-2);border:1px solid var(--line-strong);border-radius:8px;padding:11px 12px;width:100%;box-sizing:border-box}
+  input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+  textarea{min-height:60px;resize:vertical}
+  .hint{font-size:12.5px;color:var(--muted);margin:0}
+  .fieldrow{display:grid;grid-template-columns:1fr 130px auto;gap:8px;align-items:center}
+  @media (max-width:480px){.fieldrow{grid-template-columns:1fr 1fr}.fieldrow .rm{grid-column:1/-1;justify-self:end}}
+
+  .summary{display:flex;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--muted)} .summary b{color:var(--ink)}
+  .list{display:flex;flex-direction:column;gap:10px}
+  .entry{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:grid;grid-template-columns:1fr auto;gap:6px 12px;align-items:start}
+  .entry .title{font-weight:700;font-size:17px;overflow-wrap:anywhere}
+  .entry .kv{font-size:13.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 14px}
+  .entry .kv b{color:var(--ink);font-weight:500}
+  .entry .date{font-size:12.5px;color:var(--muted)}
+  .entry img{max-width:100%;max-height:260px;object-fit:cover;border-radius:6px;border:1px solid var(--line);margin-top:6px}
+  .entry .foot{grid-column:1/-1;display:flex;justify-content:flex-end;gap:8px}
+  .example-tag{font-size:11px;letter-spacing:.08em;color:var(--muted);border:1px dashed var(--line-strong);border-radius:4px;padding:1px 6px}
+  .empty{border:1px dashed var(--line-strong);border-radius:10px;padding:18px 16px;color:var(--muted);font-size:14px;background:var(--surface-2)}
+  .toast{min-height:1.4em;font-size:13.5px;color:#3C7A4C} .toast.err{color:#B03A2E}
+  details{border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+  summary{cursor:pointer;padding:12px 16px;font-weight:700;list-style:none}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"＋ ";color:var(--muted)} details[open] summary::before{content:"－ "}
+  details .inner{padding:0 16px 16px;display:flex;flex-direction:column;gap:12px}
+  footer{border-top:1px solid var(--line);padding-top:14px;color:var(--muted);font-size:13px;display:flex;flex-direction:column;gap:6px}
+  footer strong{color:var(--ink)}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">釣りも、鉢も、推しも、ぜんぶ1冊</div>
+    <h1>しゅみ帳</h1>
+    <p class="lede">趣味ごとに、記録したい項目を自分で決める。あとは書き足すだけ。集計は勝手に出る。</p>
+  </header>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div id="col-area"></div>
+
+  <div class="card" id="col-form" hidden>
+    <h2 id="col-form-title">新しい趣味を作る</h2>
+    <div class="field"><label for="c-name">趣味の名前</label><input id="c-name" placeholder="例: 釣り / ベランダ菜園 / 推しグッズ / 読んだ本"></div>
+    <div class="field"><label>記録する項目（あとから足せます）</label><div id="c-fields"></div><button class="ghost small" id="c-addfield" type="button">項目を足す</button></div>
+    <p class="hint">項目の種類：文字（魚の名前、店名）／数字（cm、円、ページ）／日付／選ぶ（釣れた・釣れなかった、など）。数字は自動で合計と平均が出ます。</p>
+    <div class="row-actions"><button class="btn" id="c-save" style="width:auto">この趣味を作る</button><button class="ghost" id="c-cancel">やめる</button></div>
+    <div class="toast" id="c-toast" role="status"></div>
+  </div>
+
+  <details>
+    <summary>バックアップと復元</summary>
+    <div class="inner">
+      <p class="hint">記録と写真はこの端末の中にだけあります。端末を替える前に必ずバックアップを。</p>
+      <div class="row-actions"><button class="ghost" id="bk-save">バックアップを保存する</button></div>
+      <div class="field"><label for="bk-text">復元：中身を貼り付けて「読み込む」</label><textarea id="bk-text" placeholder="{ ... }"></textarea></div>
+      <div class="row-actions"><button class="ghost" id="bk-load">読み込む</button><button class="ghost danger" id="bk-clear">全部消す</button></div>
+      <div class="toast" id="bk-toast" role="status"></div>
+    </div>
+  </details>
+
+  <footer>
+    <div><strong>このアプリについて。</strong>記録も写真も、あなたの端末の中にだけ。どこにも送られません。</div>
+    <div>写真は小さくして保存しますが、端末の容量は使います。端末を替えるとき、ブラウザのデータを消すときは、上からバックアップを。</div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var KEY="shumi-cho-v1";
+  var $=function(id){return document.getElementById(id);};
+  var state={cols:[],entries:[],active:null};
+  function iso(d){var p=function(n){return (n<10?"0":"")+n;};return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate());}
+  function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+  function esc(s){return String(s||"").replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+  function load(){ try{var raw=localStorage.getItem(KEY); if(raw){var d=JSON.parse(raw); if(d&&Array.isArray(d.cols)){state=d;return;}}}catch(e){} state=seed(); }
+  function save(){ try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){ ctoast("保存できませんでした。写真が多いと容量を超えます。古い写真付きの記録を消してください",true);} }
+  function seed(){
+    var c={id:"exc",name:"釣り（例）",ex:true,fields:[{k:"魚",t:"text"},{k:"大きさcm",t:"number"},{k:"場所",t:"text"},{k:"結果",t:"select",opts:["釣れた","釣れなかった"]}]};
+    var t=new Date(); var a=new Date(t);a.setDate(a.getDate()-12); var b=new Date(t);b.setDate(b.getDate()-3);
+    return {cols:[c],active:"exc",entries:[
+      {id:"exe1",col:"exc",date:iso(a),v:{"魚":"アジ","大きさcm":"24","場所":"横須賀 うみかぜ公園","結果":"釣れた"},photo:"",ex:true},
+      {id:"exe2",col:"exc",date:iso(b),v:{"魚":"","大きさcm":"","場所":"大黒海づり施設","結果":"釣れなかった"},photo:"",ex:true}
+    ]};
+  }
+  var ct=$("c-toast"); function ctoast(m,e){ct.className="toast"+(e?" err":"");ct.textContent=m;}
+
+  /* ---------- tabs ---------- */
+  function renderTabs(){
+    var t=$("tabs"); t.innerHTML="";
+    state.cols.forEach(function(c){ var b=document.createElement("button"); b.textContent=c.name; b.setAttribute("aria-pressed",String(c.id===state.active)); b.dataset.col=c.id; t.appendChild(b); });
+    var n=document.createElement("button"); n.className="new"; n.textContent="＋ 趣味を作る"; n.dataset.new="1"; t.appendChild(n);
+  }
+  $("tabs").addEventListener("click",function(ev){ var b=ev.target.closest("button"); if(!b) return;
+    if(b.dataset.new){ openColForm(null); return; } state.active=b.dataset.col; save(); renderAll(); });
+
+  /* ---------- collection form ---------- */
+  var editingCol=null;
+  function fieldRow(f){
+    var r=document.createElement("div"); r.className="fieldrow";
+    r.innerHTML='<input class="fk" placeholder="項目名（例: 魚）" value="'+esc(f?f.k:"")+'">'+
+      '<select class="ft"><option value="text">文字</option><option value="number">数字</option><option value="date">日付</option><option value="select">選ぶ</option></select>'+
+      '<button class="ghost small rm" type="button">消す</button>'+
+      '<input class="fo" placeholder="選択肢を「、」で区切る（例: 釣れた、釣れなかった）" style="grid-column:1/-1" hidden>';
+    r.querySelector(".ft").value=f?f.t:"text";
+    var fo=r.querySelector(".fo"); fo.hidden=!(f&&f.t==="select"); fo.value=f&&f.opts?f.opts.join("、"):"";
+    r.querySelector(".ft").addEventListener("change",function(){ fo.hidden=this.value!=="select"; });
+    r.querySelector(".rm").addEventListener("click",function(){ r.remove(); });
+    return r;
+  }
+  function openColForm(c){
+    editingCol=c||null; $("col-form-title").textContent=c?"趣味を直す":"新しい趣味を作る";
+    $("c-name").value=c?c.name:""; var wrap=$("c-fields"); wrap.innerHTML="";
+    (c?c.fields:[{k:"",t:"text"}]).forEach(function(f){ wrap.appendChild(fieldRow(f)); });
+    $("col-form").hidden=false; ctoast(""); $("c-name").focus(); $("col-form").scrollIntoView({behavior:"smooth",block:"start"});
+  }
+  $("c-addfield").addEventListener("click",function(){ $("c-fields").appendChild(fieldRow(null)); });
+  $("c-cancel").addEventListener("click",function(){ $("col-form").hidden=true; editingCol=null; });
+  $("c-save").addEventListener("click",function(){
+    var name=$("c-name").value.trim(); if(!name){ctoast("趣味の名前を入れてください",true);return;}
+    var fields=[]; Array.prototype.forEach.call($("c-fields").querySelectorAll(".fieldrow"),function(r){
+      var k=r.querySelector(".fk").value.trim(); if(!k) return; var t=r.querySelector(".ft").value;
+      var f={k:k,t:t}; if(t==="select"){ f.opts=r.querySelector(".fo").value.split(/[、,]/).map(function(s){return s.trim();}).filter(Boolean); }
+      fields.push(f); });
+    if(!fields.length){ctoast("記録する項目を1つは入れてください",true);return;}
+    if(editingCol){ editingCol.name=name; editingCol.fields=fields; editingCol.ex=false; }
+    else { var c={id:uid(),name:name,fields:fields,ex:false}; state.cols.push(c); state.active=c.id; }
+    save(); $("col-form").hidden=true; editingCol=null; renderAll();
+  });
+
+  /* ---------- entries ---------- */
+  var pendingPhoto="", editingEntry=null;
+  function renderCol(){
+    var area=$("col-area"); area.innerHTML="";
+    var c=state.cols.find(function(x){return x.id===state.active;});
+    if(!c){ var e=document.createElement("div"); e.className="empty"; e.textContent="まだ趣味がありません。上の「＋ 趣味を作る」から、1つ作ってみてください。項目は自分で決められます。"; area.appendChild(e); return; }
+    var entries=state.entries.filter(function(x){return x.col===c.id;}).sort(function(a,b){return b.date.localeCompare(a.date);});
+    var ym=iso(new Date()).slice(0,7); var thisMonth=entries.filter(function(x){return x.date.slice(0,7)===ym;}).length;
+    var sums=c.fields.filter(function(f){return f.t==="number";}).map(function(f){
+      var vals=entries.map(function(x){return parseFloat(x.v[f.k]);}).filter(function(n){return !isNaN(n);});
+      var sum=vals.reduce(function(s,n){return s+n;},0); return {k:f.k,n:vals.length,sum:sum,avg:vals.length?sum/vals.length:0,max:vals.length?Math.max.apply(null,vals):0};
+    });
+    var head=document.createElement("div"); head.className="card";
+    head.innerHTML='<div class="row-actions" style="justify-content:space-between"><h2>'+esc(c.name)+(c.ex?' <span class="example-tag">例</span>':'')+'</h2><span class="row-actions"><button class="ghost small" id="col-edit">項目を直す</button><button class="ghost small danger" id="col-del">この趣味を消す</button></span></div>'+
+      '<div class="summary"><span>記録 <b>'+entries.length+'</b></span><span>今月 <b>'+thisMonth+'</b></span>'+sums.map(function(s){return '<span>'+esc(s.k)+' 合計 <b class="mono">'+Math.round(s.sum*10)/10+'</b> 平均 <b class="mono">'+Math.round(s.avg*10)/10+'</b> 最大 <b class="mono">'+s.max+'</b></span>';}).join("")+'</div>'+
+      '<button class="btn" id="e-open">記録を足す</button>'+
+      '<div id="e-form" hidden style="display:flex;flex-direction:column;gap:12px"></div>';
+    area.appendChild(head);
+    $("col-edit").addEventListener("click",function(){openColForm(c);});
+    $("col-del").addEventListener("click",function(){ if(confirm("「"+c.name+"」とその記録をすべて消しますか？")){ state.entries=state.entries.filter(function(x){return x.col!==c.id;}); state.cols=state.cols.filter(function(x){return x.id!==c.id;}); state.active=state.cols.length?state.cols[0].id:null; save(); renderAll(); } });
+    $("e-open").addEventListener("click",function(){ openEntryForm(c,null); });
+
+    var list=document.createElement("div"); list.className="list";
+    if(!entries.length){ var e2=document.createElement("div"); e2.className="empty"; e2.textContent="まだ記録がありません。「記録を足す」から1件目を。"; list.appendChild(e2); }
+    entries.forEach(function(x){
+      var el=document.createElement("div"); el.className="entry";
+      var title=c.fields.map(function(f){return x.v[f.k];}).find(function(v){return v&&String(v).trim();})||"（無題）";
+      el.innerHTML='<div><div class="title">'+esc(title)+(x.ex?' <span class="example-tag">例</span>':'')+'</div><div class="kv">'+c.fields.map(function(f){var v=x.v[f.k]; return v?'<span>'+esc(f.k)+' <b>'+esc(v)+'</b></span>':"";}).join("")+'</div>'+(x.photo?'<img alt="写真" src="'+x.photo+'">':'')+'</div>'+
+        '<div class="date mono">'+esc(x.date.replace(/-/g,"."))+'</div>'+
+        '<div class="foot"><button class="ghost small" data-eact="edit" data-id="'+x.id+'">直す</button><button class="ghost small danger" data-eact="del" data-id="'+x.id+'">消す</button></div>';
+      list.appendChild(el);
+    });
+    area.appendChild(list);
+    list.addEventListener("click",function(ev){ var b=ev.target.closest("button[data-eact]"); if(!b) return; var x=state.entries.find(function(y){return y.id===b.dataset.id;}); if(!x) return;
+      if(b.dataset.eact==="edit"){ openEntryForm(c,x); head.scrollIntoView({behavior:"smooth",block:"start"}); }
+      if(b.dataset.eact==="del"){ if(confirm("この記録を消しますか？")){ state.entries=state.entries.filter(function(y){return y.id!==x.id;}); save(); renderAll(); } } });
+  }
+  function openEntryForm(c,x){
+    editingEntry=x||null; pendingPhoto=x?x.photo:""; var f=$("e-form"); f.hidden=false; $("e-open").hidden=true; f.innerHTML="";
+    var d=document.createElement("div"); d.className="field"; d.innerHTML='<label for="e-date">日付</label><input id="e-date" type="date" value="'+(x?x.date:iso(new Date()))+'">'; f.appendChild(d);
+    c.fields.forEach(function(fd,i){
+      var w=document.createElement("div"); w.className="field"; var id="e-f"+i; var v=x?(x.v[fd.k]||""):"";
+      var ctl= fd.t==="select"? '<select id="'+id+'"><option value="">—</option>'+(fd.opts||[]).map(function(o){return '<option'+(o===v?' selected':'')+'>'+esc(o)+'</option>';}).join("")+'</select>'
+             : '<input id="'+id+'" type="'+(fd.t==="number"?"number":fd.t==="date"?"date":"text")+'" '+(fd.t==="number"?'inputmode="decimal" step="any"':'')+' value="'+esc(v)+'">';
+      w.innerHTML='<label for="'+id+'">'+esc(fd.k)+'</label>'+ctl; f.appendChild(w);
+    });
+    var p=document.createElement("div"); p.className="field"; p.innerHTML='<label for="e-photo">写真（任意）</label><input id="e-photo" type="file" accept="image/*">'; f.appendChild(p);
+    var acts=document.createElement("div"); acts.className="row-actions"; acts.innerHTML='<button class="btn" id="e-save" style="width:auto">保存する</button><button class="ghost" id="e-cancel">やめる</button><span class="toast" id="e-toast" role="status"></span>'; f.appendChild(acts);
+    $("e-photo").addEventListener("change",function(){ var fl=this.files&&this.files[0]; if(!fl) return; var img=new Image(); var url=URL.createObjectURL(fl);
+      img.onload=function(){ var max=900,w=img.width,h=img.height,r=Math.min(1,max/Math.max(w,h)); var cv=document.createElement("canvas"); cv.width=Math.round(w*r); cv.height=Math.round(h*r); cv.getContext("2d").drawImage(img,0,0,cv.width,cv.height); pendingPhoto=cv.toDataURL("image/jpeg",0.72); URL.revokeObjectURL(url); $("e-toast").textContent="写真を読み込みました"; };
+      img.src=url; });
+    $("e-cancel").addEventListener("click",function(){ f.hidden=true; $("e-open").hidden=false; editingEntry=null; });
+    $("e-save").addEventListener("click",function(){
+      var date=$("e-date").value; if(!date){$("e-toast").textContent="日付を入れてください";return;}
+      var v={}; c.fields.forEach(function(fd,i){ v[fd.k]=$("e-f"+i).value.trim(); });
+      if(!Object.keys(v).some(function(k){return v[k];})){ $("e-toast").textContent="どれか1つは入れてください"; return; }
+      var rec={id:editingEntry?editingEntry.id:uid(),col:c.id,date:date,v:v,photo:pendingPhoto||"",ex:false};
+      if(editingEntry){ state.entries=state.entries.map(function(y){return y.id===editingEntry.id?rec:y;}); } else state.entries.push(rec);
+      save(); renderAll();
+    });
+  }
+  function renderAll(){ renderTabs(); renderCol(); }
+
+  /* ---------- backup ---------- */
+  var bkToast=$("bk-toast"); function bt(m,e){bkToast.className="toast"+(e?" err":"");bkToast.textContent=m;}
+  var downloads=null;
+  function fallback(text){ $("bk-text").value=text; bt("この端末では直接保存できないので、下の欄に出しました。全部コピーして保管してください"); }
+  $("bk-save").addEventListener("click",function(){
+    var text=JSON.stringify({app:"shumi-cho",v:1,cols:state.cols.filter(function(c){return !c.ex;}),entries:state.entries.filter(function(e){return !e.ex;})},null,1);
+    var fn="shumi-cho-"+iso(new Date())+".json";
+    if(downloads){ downloads.save({filename:fn,data:text}).then(function(){bt("保存しました: "+fn);}).catch(function(){fallback(text);}); } else fallback(text);
+  });
+  $("bk-load").addEventListener("click",function(){
+    try{ var d=JSON.parse($("bk-text").value); if(!d||!Array.isArray(d.cols)) throw 0;
+      var cols=state.cols.filter(function(c){return !c.ex;}), ents=state.entries.filter(function(e){return !e.ex;});
+      var cid={},eid={}; cols.forEach(function(c){cid[c.id]=1;}); ents.forEach(function(e){eid[e.id]=1;});
+      d.cols.forEach(function(c){ if(!cid[c.id]) cols.push(c); }); (d.entries||[]).forEach(function(e){ if(!eid[e.id]) ents.push(e); });
+      state.cols=cols; state.entries=ents; state.active=cols.length?cols[0].id:null; save(); renderAll(); bt(d.cols.length+"個の趣味と"+(d.entries||[]).length+"件の記録を読み込みました"); $("bk-text").value="";
+    }catch(e){ bt("読み込めませんでした",true); }
+  });
+  $("bk-clear").addEventListener("click",function(){ if(confirm("すべての趣味と記録を消します。バックアップは取りましたか？")){state={cols:[],entries:[],active:null};save();renderAll();bt("全部消しました");} });
+
+  load(); renderAll();
+  if(window.claude&&typeof window.claude.use==="function"){ window.claude.use("downloads").then(function(ns){downloads=ns||null;}).catch(function(){}); }
+})();
+</script>

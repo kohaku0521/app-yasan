@@ -1,0 +1,195 @@
+<title>きょうのひとこと帳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --bg:#F3F1EA; --surface:#FFFFFF; --surface-2:#F8F6F0;
+    --ink:#1F1E19; --muted:#6C685C; --line:#DAD6CB; --line-strong:#BDB8AA;
+    --accent:#A67C0F; --accent-ink:#FFFFFF; --accent-soft:#F6ECD2;
+    --good:#3C7A4C; --good-soft:#E3F0E6; --mid:#7A7A5A; --mid-soft:#EEEEDF; --low:#9B5B3A; --low-soft:#F4E6DE;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --bg:#181711; --surface:#21201A; --surface-2:#282720;
+      --ink:#EFEDE3; --muted:#A39E8E; --line:#33312A; --line-strong:#4B483E;
+      --accent:#E6C25A; --accent-ink:#2A2005; --accent-soft:#3A3218;
+      --good:#7FB98C; --good-soft:#1F2E23; --mid:#B8B890; --mid-soft:#2B2B22; --low:#E0A07E; --low-soft:#36261D;
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#181711; --surface:#21201A; --surface-2:#282720;
+    --ink:#EFEDE3; --muted:#A39E8E; --line:#33312A; --line-strong:#4B483E;
+    --accent:#E6C25A; --accent-ink:#2A2005; --accent-soft:#3A3218;
+    --good:#7FB98C; --good-soft:#1F2E23; --mid:#B8B890; --mid-soft:#2B2B22; --low:#E0A07E; --low-soft:#36261D;
+    color-scheme:dark;
+  }
+  body{background:var(--bg);color:var(--ink);font-family:"Zen Kaku Gothic New",system-ui,-apple-system,"Hiragino Sans",sans-serif;font-size:19px;line-height:1.7;-webkit-text-size-adjust:100%}
+  .wrap{max-width:600px;margin-inline:auto;padding-inline:16px;padding-block:24px 72px;display:flex;flex-direction:column;gap:24px}
+  .mono{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
+  header{display:flex;flex-direction:column;gap:6px}
+  .eyebrow{font-size:13px;letter-spacing:.12em;color:var(--muted);font-weight:500}
+  h1{margin:0;font-size:32px;line-height:1.15;font-weight:700;text-wrap:balance}
+  .lede{margin:0;color:var(--muted);font-size:15px}
+
+  .today{background:var(--surface);border:2px solid var(--accent);border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:16px}
+  .today .date{font-size:15px;color:var(--muted)}
+  .today .who{font-size:22px;font-weight:700}
+  .moods{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .moods button{font:inherit;font-size:20px;font-weight:700;padding:20px 8px;border-radius:12px;border:2px solid var(--line-strong);background:var(--surface-2);color:var(--ink);cursor:pointer;min-height:76px}
+  .moods button[data-m="good"][aria-pressed="true"]{background:var(--good-soft);border-color:var(--good);color:var(--good)}
+  .moods button[data-m="mid"][aria-pressed="true"]{background:var(--mid-soft);border-color:var(--mid);color:var(--mid)}
+  .moods button[data-m="low"][aria-pressed="true"]{background:var(--low-soft);border-color:var(--low);color:var(--low)}
+  .moods button:focus-visible,.big:focus-visible,.ghost:focus-visible{outline:4px solid var(--accent);outline-offset:2px}
+  textarea{font:inherit;font-size:20px;line-height:1.6;color:var(--ink);background:var(--surface-2);border:2px solid var(--line-strong);border-radius:12px;padding:14px;width:100%;box-sizing:border-box;min-height:96px;resize:vertical}
+  textarea:focus-visible{outline:4px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+  .big{font:inherit;font-weight:700;font-size:21px;padding:18px;border-radius:12px;border:2px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer;width:100%}
+  .big:hover{filter:brightness(1.05)}
+  .ghost{font:inherit;font-size:16px;padding:12px 16px;border-radius:10px;border:2px solid var(--line-strong);background:var(--surface);color:var(--ink);cursor:pointer}
+  .ghost.small{font-size:15px;padding:9px 12px}
+  .ghost.danger{color:#B03A2E;border-color:#B03A2E}
+  .row-actions{display:flex;gap:10px;flex-wrap:wrap}
+  .toast{min-height:1.4em;font-size:16px;color:var(--good)} .toast.err{color:#B03A2E}
+
+  .stats{display:flex;gap:14px;flex-wrap:wrap;font-size:16px;color:var(--muted)} .stats b{color:var(--ink);font-size:20px}
+  .month{display:flex;flex-direction:column;gap:10px}
+  .month h2{margin:8px 0 0;font-size:18px;color:var(--muted);font-weight:700}
+  .day{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--line-strong);border-radius:10px;padding:14px 16px;display:grid;grid-template-columns:auto 1fr auto;gap:6px 14px;align-items:start}
+  .day.good{border-left-color:var(--good)} .day.mid{border-left-color:var(--mid)} .day.low{border-left-color:var(--low)}
+  .day .d{font-size:16px;color:var(--muted);white-space:nowrap}
+  .day .m{font-size:15px;font-weight:700} .day.good .m{color:var(--good)} .day.mid .m{color:var(--mid)} .day.low .m{color:var(--low)}
+  .day .t{grid-column:1/-1;font-size:19px;overflow-wrap:anywhere}
+  .example-tag{font-size:12px;letter-spacing:.08em;color:var(--muted);border:1px dashed var(--line-strong);border-radius:4px;padding:1px 6px}
+  .empty{border:2px dashed var(--line-strong);border-radius:12px;padding:20px 16px;color:var(--muted);font-size:17px;background:var(--surface-2)}
+  .field{display:flex;flex-direction:column;gap:6px} .field label{font-size:15px;color:var(--muted)}
+  input{font:inherit;font-size:19px;color:var(--ink);background:var(--surface-2);border:2px solid var(--line-strong);border-radius:10px;padding:12px;width:100%;box-sizing:border-box}
+  input:focus-visible{outline:4px solid var(--accent);outline-offset:1px}
+  .hint{font-size:14px;color:var(--muted);margin:0}
+  details{border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+  summary{cursor:pointer;padding:14px 18px;font-weight:700;font-size:17px;list-style:none}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"＋ ";color:var(--muted)} details[open] summary::before{content:"－ "}
+  details .inner{padding:0 18px 18px;display:flex;flex-direction:column;gap:14px}
+  footer{border-top:1px solid var(--line);padding-top:16px;color:var(--muted);font-size:15px;display:flex;flex-direction:column;gap:8px}
+  footer strong{color:var(--ink)}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">今日、できたこと。ひとことだけ</div>
+    <h1>きょうのひとこと帳</h1>
+    <p class="lede">薬や血圧は書きません。「散歩に行けた」「食欲があった」。家族が一行残すだけの帳面です。</p>
+  </header>
+
+  <div class="today">
+    <div class="date mono" id="t-date"></div>
+    <div class="who"><span id="t-who">（名前）</span>の今日</div>
+    <div class="moods" role="group" aria-label="今日の調子">
+      <button data-m="good" aria-pressed="false">元気</button>
+      <button data-m="mid" aria-pressed="false">ふつう</button>
+      <button data-m="low" aria-pressed="false">しんどい</button>
+    </div>
+    <textarea id="t-text" placeholder="今日できたことを、ひとこと。例：近所を15分歩けた／お昼を全部食べた／電話で笑っていた"></textarea>
+    <button class="big" id="t-save">きょうの分を残す</button>
+    <div class="toast" id="toast" role="status"></div>
+  </div>
+
+  <div class="stats" id="stats"></div>
+  <div id="months"></div>
+
+  <details>
+    <summary>名前・バックアップ・復元</summary>
+    <div class="inner">
+      <div class="field"><label for="s-who">誰の帳面？</label><input id="s-who" placeholder="例: 母 / おばあちゃん / 父"><button class="ghost small" id="s-who-save" style="align-self:flex-start">名前を保存</button></div>
+      <p class="hint">記録はこの端末の中にだけあります。<strong>端末を替える前に必ずバックアップを。</strong>家族で見たいときは、バックアップの中身を送って、相手の端末で「読み込む」。</p>
+      <div class="row-actions"><button class="ghost" id="bk-save">バックアップを保存する</button></div>
+      <div class="field"><label for="bk-text">復元：中身を貼り付けて「読み込む」</label><textarea id="bk-text" style="font-size:15px;min-height:70px" placeholder="{ ... }"></textarea></div>
+      <div class="row-actions"><button class="ghost" id="bk-load">読み込む</button><button class="ghost danger" id="bk-clear">全部消す</button></div>
+      <div class="toast" id="bk-toast" role="status"></div>
+    </div>
+  </details>
+
+  <footer>
+    <div><strong>このアプリについて。</strong>記録はあなたの端末の中にだけ。どこにも送られません。</div>
+    <div>薬・血圧・体温などの医療の記録は扱いません。そういう記録は、お薬手帳やかかりつけの先生と使う専用のものへ。ここは「今日のいいこと」を残す場所です。</div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var KEY="hitokoto-cho-v1";
+  var $=function(id){return document.getElementById(id);};
+  var state={who:"",days:{}};
+  var WD=["日","月","火","水","木","金","土"];
+  function today(){var d=new Date();d.setHours(0,0,0,0);return d;}
+  function iso(d){var p=function(n){return (n<10?"0":"")+n;};return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate());}
+  function esc(s){return String(s||"").replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+  function load(){ try{var raw=localStorage.getItem(KEY); if(raw){var d=JSON.parse(raw); if(d&&d.days){state=d;return;}}}catch(e){} state=seed(); }
+  function save(){ try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){toast("保存できませんでした",true);} }
+  function seed(){ var t=today(); var a=new Date(t);a.setDate(a.getDate()-2); var b=new Date(t);b.setDate(b.getDate()-1); var days={};
+    days[iso(a)]={m:"good",t:"近所を15分歩けた。帰りに柿を買ってきた（例）",ex:true}; days[iso(b)]={m:"mid",t:"お昼は半分。午後は昔の写真を見て笑っていた（例）",ex:true};
+    return {who:"",days:days}; }
+  var toastEl=$("toast"); function toast(m,e){toastEl.className="toast"+(e?" err":"");toastEl.textContent=m;}
+  var MOOD={good:"元気",mid:"ふつう",low:"しんどい"};
+
+  var mood="";
+  document.querySelector(".moods").addEventListener("click",function(ev){ var b=ev.target.closest("button[data-m]"); if(!b) return; mood=b.dataset.m;
+    Array.prototype.forEach.call(document.querySelectorAll(".moods button"),function(x){x.setAttribute("aria-pressed",String(x===b));}); });
+
+  function renderToday(){
+    var t=today(); $("t-date").textContent=iso(t).replace(/-/g,".")+"（"+WD[t.getDay()]+"）";
+    $("t-who").textContent=state.who||"（名前）"; $("s-who").value=state.who||"";
+    var cur=state.days[iso(t)]; if(cur&&!cur.ex){ mood=cur.m; $("t-text").value=cur.t; Array.prototype.forEach.call(document.querySelectorAll(".moods button"),function(x){x.setAttribute("aria-pressed",String(x.dataset.m===cur.m));}); }
+  }
+  $("t-save").addEventListener("click",function(){
+    var text=$("t-text").value.trim(); if(!mood&&!text){toast("調子を1つ選ぶか、ひとこと書いてください",true);return;}
+    state.days[iso(today())]={m:mood||"mid",t:text,ex:false}; save(); renderAll(); toast("きょうの分を残しました。おつかれさまです");
+  });
+
+  function renderList(){
+    var keys=Object.keys(state.days).sort().reverse(); var ym=iso(today()).slice(0,7);
+    var thisMonth=keys.filter(function(k){return k.slice(0,7)===ym&&!state.days[k].ex;}).length;
+    var streak=0; var d=today(); while(true){ var k=iso(d); if(state.days[k]&&!state.days[k].ex){streak++; d.setDate(d.getDate()-1);} else break; }
+    var goods=keys.filter(function(k){return k.slice(0,7)===ym&&state.days[k].m==="good"&&!state.days[k].ex;}).length;
+    $("stats").innerHTML='<span>今月 <b>'+thisMonth+'</b>日 書けた</span><span>つづけて <b>'+streak+'</b>日</span><span>元気の日 <b>'+goods+'</b></span>';
+    var wrap=$("months"); wrap.innerHTML="";
+    if(!keys.length){ var e=document.createElement("div"); e.className="empty"; e.textContent="まだ何もありません。上の3つから今日の調子を選んで、ひとこと残してみてください。"; wrap.appendChild(e); return; }
+    var byM={}; keys.forEach(function(k){ (byM[k.slice(0,7)]=byM[k.slice(0,7)]||[]).push(k); });
+    Object.keys(byM).sort().reverse().forEach(function(m){
+      var sec=document.createElement("div"); sec.className="month"; var h=document.createElement("h2"); h.textContent=m.replace("-","年")+"月"; sec.appendChild(h);
+      byM[m].forEach(function(k){ var x=state.days[k]; var p=k.split("-").map(Number); var dt=new Date(p[0],p[1]-1,p[2]);
+        var el=document.createElement("div"); el.className="day "+x.m;
+        el.innerHTML='<span class="d mono">'+p[2]+'日（'+WD[dt.getDay()]+'）</span><span class="m">'+MOOD[x.m]+(x.ex?' <span class="example-tag">例</span>':'')+'</span><button class="ghost small danger" data-del="'+k+'">消す</button><div class="t">'+esc(x.t||"（ひとことなし）")+'</div>';
+        sec.appendChild(el); });
+      wrap.appendChild(sec);
+    });
+  }
+  $("months").addEventListener("click",function(ev){ var b=ev.target.closest("button[data-del]"); if(!b) return; if(confirm(b.dataset.del.replace(/-/g,".")+" の分を消しますか？")){ delete state.days[b.dataset.del]; save(); renderAll(); } });
+  function renderAll(){ renderToday(); renderList(); }
+
+  $("s-who-save").addEventListener("click",function(){ state.who=$("s-who").value.trim(); save(); renderToday(); bt("名前を保存しました"); });
+  var bkToast=$("bk-toast"); function bt(m,e){bkToast.className="toast"+(e?" err":"");bkToast.textContent=m;}
+  var downloads=null;
+  function fallback(text){ $("bk-text").value=text; bt("この端末では直接保存できないので、下の欄に出しました。全部コピーして保管してください"); }
+  $("bk-save").addEventListener("click",function(){
+    var real={}; Object.keys(state.days).forEach(function(k){ if(!state.days[k].ex) real[k]=state.days[k]; });
+    var text=JSON.stringify({app:"hitokoto-cho",v:1,who:state.who,days:real},null,1); var fn="hitokoto-"+(state.who||"cho")+"-"+iso(today())+".json";
+    if(downloads){ downloads.save({filename:fn,data:text}).then(function(){bt("保存しました: "+fn);}).catch(function(){fallback(text);}); } else fallback(text);
+  });
+  $("bk-load").addEventListener("click",function(){
+    try{ var d=JSON.parse($("bk-text").value); if(!d||!d.days) throw 0;
+      Object.keys(state.days).forEach(function(k){ if(state.days[k].ex) delete state.days[k]; });
+      Object.keys(d.days).forEach(function(k){ if(!state.days[k]) state.days[k]=d.days[k]; }); if(d.who&&!state.who) state.who=d.who;
+      save(); renderAll(); bt(Object.keys(d.days).length+"日分を読み込みました"); $("bk-text").value="";
+    }catch(e){ bt("読み込めませんでした",true); }
+  });
+  $("bk-clear").addEventListener("click",function(){ if(confirm("すべての記録を消します。バックアップは取りましたか？")){state.days={};save();renderAll();bt("全部消しました");} });
+
+  load(); renderAll();
+  if(window.claude&&typeof window.claude.use==="function"){ window.claude.use("downloads").then(function(ns){downloads=ns||null;}).catch(function(){}); }
+})();
+</script>

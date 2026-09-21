@@ -1,0 +1,298 @@
+<title>ほしょう帳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --bg:#F1F2EE; --surface:#FFFFFF; --surface-2:#F7F8F4;
+    --ink:#1E211C; --muted:#6A6F63; --line:#D7D9D1; --line-strong:#B9BDB1;
+    --accent:#2F4C7C; --accent-ink:#FFFFFF; --accent-soft:#E4EAF5;
+    --ok:#3C7A4C; --ok-soft:#E3F0E6; --warn:#B57A1E; --warn-soft:#F8EEDB; --bad:#B03A2E; --bad-soft:#F7E3E0;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --bg:#171913; --surface:#1F221B; --surface-2:#262A21;
+      --ink:#ECEDE5; --muted:#9AA091; --line:#30342B; --line-strong:#464B3F;
+      --accent:#8FA9D9; --accent-ink:#0F1A2E; --accent-soft:#232C3D;
+      --ok:#7FB98C; --ok-soft:#1F2E23; --warn:#E0B25A; --warn-soft:#332A15; --bad:#E58A7E; --bad-soft:#38201D;
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#171913; --surface:#1F221B; --surface-2:#262A21;
+    --ink:#ECEDE5; --muted:#9AA091; --line:#30342B; --line-strong:#464B3F;
+    --accent:#8FA9D9; --accent-ink:#0F1A2E; --accent-soft:#232C3D;
+    --ok:#7FB98C; --ok-soft:#1F2E23; --warn:#E0B25A; --warn-soft:#332A15; --bad:#E58A7E; --bad-soft:#38201D;
+    color-scheme:dark;
+  }
+  body{background:var(--bg);color:var(--ink);font-family:"Zen Kaku Gothic New",system-ui,-apple-system,"Hiragino Sans",sans-serif;font-size:16px;line-height:1.65;-webkit-text-size-adjust:100%}
+  .wrap{max-width:640px;margin-inline:auto;padding-inline:16px;padding-block:24px 72px;display:flex;flex-direction:column;gap:22px}
+  .mono{font-family:"IBM Plex Mono","Zen Kaku Gothic New",monospace;font-variant-numeric:tabular-nums}
+  header{display:flex;flex-direction:column;gap:6px}
+  .eyebrow{font-size:12px;letter-spacing:.12em;color:var(--muted);font-weight:500}
+  h1{margin:0;font-size:30px;line-height:1.15;font-weight:700;letter-spacing:.01em;text-wrap:balance}
+  .lede{margin:0;color:var(--muted);font-size:14px}
+
+  .alert{border-left:4px solid var(--warn);background:var(--warn-soft);border-radius:0 6px 6px 0;padding:12px 14px;font-size:14px}
+  .alert.bad{border-color:var(--bad);background:var(--bad-soft)}
+  .alert strong{display:block;margin-bottom:2px}
+
+  .btn{font:inherit;font-weight:700;font-size:16px;padding:14px 18px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer;width:100%}
+  .btn:hover{filter:brightness(1.06)}
+  .btn:focus-visible,.ghost:focus-visible,.icon:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+  .ghost{font:inherit;font-size:14px;padding:10px 14px;border-radius:8px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);cursor:pointer}
+  .ghost.small{padding:7px 10px;font-size:13px}
+  .ghost.danger{color:var(--bad);border-color:var(--bad)}
+  .row-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:12px}
+  .card h2{margin:0;font-size:17px}
+  .field{display:flex;flex-direction:column;gap:5px}
+  .field label{font-size:13px;color:var(--muted);font-weight:500}
+  input,select,textarea{font:inherit;font-size:16px;color:var(--ink);background:var(--surface-2);border:1px solid var(--line-strong);border-radius:8px;padding:11px 12px;width:100%;box-sizing:border-box}
+  input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+  textarea{min-height:64px;resize:vertical}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media (max-width:420px){.two{grid-template-columns:1fr}}
+  .hint{font-size:12.5px;color:var(--muted);margin:0}
+
+  .list{display:flex;flex-direction:column;gap:10px}
+  .item{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:start}
+  .item .name{font-weight:700;font-size:17px;overflow-wrap:anywhere}
+  .item .sub{font-size:13px;color:var(--muted)}
+  .chip{font-size:12.5px;font-weight:700;padding:5px 10px;border-radius:999px;white-space:nowrap;align-self:start}
+  .chip.ok{background:var(--ok-soft);color:var(--ok)}
+  .chip.warn{background:var(--warn-soft);color:var(--warn)}
+  .chip.bad{background:var(--bad-soft);color:var(--bad)}
+  .item .foot{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+  .item img{max-width:100%;border-radius:6px;border:1px solid var(--line);margin-top:6px}
+  .example-tag{font-size:11px;letter-spacing:.08em;color:var(--muted);border:1px dashed var(--line-strong);border-radius:4px;padding:1px 6px}
+
+  .empty{border:1px dashed var(--line-strong);border-radius:10px;padding:18px 16px;color:var(--muted);font-size:14px;background:var(--surface-2)}
+  .toast{min-height:1.4em;font-size:13.5px;color:var(--ok)}
+  .toast.err{color:var(--bad)}
+  details{border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+  summary{cursor:pointer;padding:12px 16px;font-weight:700;list-style:none}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"＋ ";color:var(--muted)}
+  details[open] summary::before{content:"－ "}
+  details .inner{padding:0 16px 16px;display:flex;flex-direction:column;gap:12px}
+  footer{border-top:1px solid var(--line);padding-top:14px;color:var(--muted);font-size:13px;display:flex;flex-direction:column;gap:6px}
+  footer strong{color:var(--ink)}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">家のもの、ぜんぶ1か所に</div>
+    <h1>ほしょう帳</h1>
+    <p class="lede">家電の保証がいつ切れるか、開いた瞬間に分かる。メーカーを問わず、家中のものをまとめて。</p>
+  </header>
+
+  <div id="alerts"></div>
+
+  <button class="btn" id="open-add">家電を登録する</button>
+
+  <div class="card" id="form-card" hidden>
+    <h2 id="form-title">新しく登録</h2>
+    <div class="field"><label for="f-name">品名</label><input id="f-name" placeholder="例: 冷蔵庫 / 洗濯機 / エアコン（寝室）"></div>
+    <div class="two">
+      <div class="field"><label for="f-maker">メーカー（任意）</label><input id="f-maker" placeholder="例: パナソニック"></div>
+      <div class="field"><label for="f-model">型番（任意）</label><input id="f-model" placeholder="例: NR-F55"></div>
+    </div>
+    <div class="two">
+      <div class="field"><label for="f-date">購入日</label><input id="f-date" type="date"></div>
+      <div class="field"><label for="f-months">保証の長さ</label>
+        <select id="f-months">
+          <option value="12">1年（メーカー保証の標準）</option>
+          <option value="24">2年</option>
+          <option value="36">3年</option>
+          <option value="60">5年（延長保証など）</option>
+          <option value="120">10年</option>
+        </select>
+      </div>
+    </div>
+    <div class="field"><label for="f-photo">レシート・保証書の写真（任意）</label><input id="f-photo" type="file" accept="image/*"><p class="hint">写真は自動で小さくして保存します。端末の容量を使うので、多くなったら古いものから消してください。</p></div>
+    <div class="field"><label for="f-note">メモ（任意）</label><textarea id="f-note" placeholder="例: 購入店の連絡先、修理窓口の電話番号"></textarea></div>
+    <div class="row-actions">
+      <button class="btn" id="f-save" style="width:auto">保存する</button>
+      <button class="ghost" id="f-cancel">やめる</button>
+    </div>
+    <div class="toast" id="toast" role="status"></div>
+  </div>
+
+  <section>
+    <div class="list" id="list"></div>
+  </section>
+
+  <details>
+    <summary>バックアップと復元</summary>
+    <div class="inner">
+      <p class="hint">記録はこの端末の中にだけあります。<strong>端末を替える前、アプリを消す前に必ずバックアップを。</strong></p>
+      <div class="row-actions">
+        <button class="ghost" id="bk-save">バックアップを保存する</button>
+        <button class="ghost" id="bk-ics">期限をカレンダーに入れる（.ics）</button>
+      </div>
+      <div class="field"><label for="bk-text">復元：保存したファイルの中身を貼り付けて「読み込む」</label><textarea id="bk-text" placeholder="{ ... }"></textarea></div>
+      <div class="row-actions"><button class="ghost" id="bk-load">読み込む</button><button class="ghost danger" id="bk-clear">全部消す</button></div>
+      <div class="toast" id="bk-toast" role="status"></div>
+    </div>
+  </details>
+
+  <footer>
+    <div><strong>このアプリについて。</strong>あなたの端末の中にだけ記録が置かれます。どこにも送られません。誰にも見られません。</div>
+    <div>その代わり、端末を替えたり、ブラウザのデータを消したりすると記録も消えます。バックアップは上の「バックアップと復元」から。</div>
+    <div>通知の代わりに、開いたときに30日以内のものを上に出します。カレンダーに入れておきたいときは .ics を使ってください。</div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var KEY="hosho-cho-v1";
+  var $=function(id){return document.getElementById(id);};
+  var state={items:[],examples:true};
+
+  function load(){
+    try{var raw=localStorage.getItem(KEY); if(raw){var d=JSON.parse(raw); if(d&&Array.isArray(d.items)){state=d; return;}}}catch(e){}
+    state={items:seed(),examples:true};
+  }
+  function save(){ try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){ toast("保存できませんでした。端末の容量か、ブラウザの設定を確認してください",true); } }
+  function seed(){
+    var d=new Date(); var y=d.getFullYear();
+    return [
+      {id:"ex1",name:"冷蔵庫（例）",maker:"—",model:"",date:(y-1)+"-11-20",months:12,note:"例です。右下の「消す」で削除できます",photo:"",ex:true},
+      {id:"ex2",name:"エアコン 寝室（例）",maker:"—",model:"",date:(y-3)+"-06-02",months:60,note:"",photo:"",ex:true}
+    ];
+  }
+  function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+  function addMonths(iso,m){ var p=iso.split("-").map(Number); var d=new Date(p[0],p[1]-1+m,p[2]); return d; }
+  function daysLeft(it){ var end=addMonths(it.date,Number(it.months)); var t=new Date(); t.setHours(0,0,0,0); return Math.round((end-t)/86400000); }
+  function fmt(d){ var p=function(n){return (n<10?"0":"")+n;}; return d.getFullYear()+"."+p(d.getMonth()+1)+"."+p(d.getDate()); }
+  function esc(s){ return String(s||"").replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+
+  var toastEl=$("toast");
+  function toast(msg,err){ toastEl.className="toast"+(err?" err":""); toastEl.textContent=msg; }
+
+  /* ---------- render ---------- */
+  function render(){
+    var items=state.items.slice().sort(function(a,b){return daysLeft(a)-daysLeft(b);});
+    var soon=items.filter(function(i){var d=daysLeft(i); return d<=30;});
+    var al=$("alerts"); al.innerHTML="";
+    if(soon.length){
+      var expired=soon.filter(function(i){return daysLeft(i)<0;}).length;
+      var box=document.createElement("div"); box.className="alert"+(expired?" bad":"");
+      var s=document.createElement("strong"); s.textContent= expired? expired+"件の保証が切れています": soon.length+"件が30日以内に切れます";
+      box.appendChild(s);
+      box.appendChild(document.createTextNode(soon.map(function(i){return i.name;}).join("、")));
+      al.appendChild(box);
+    }
+    var list=$("list"); list.innerHTML="";
+    if(!items.length){
+      var e=document.createElement("div"); e.className="empty";
+      e.textContent="まだ何も登録されていません。上の「家電を登録する」から、冷蔵庫でも炊飯器でも、保証書のあるものを1つ入れてみてください。";
+      list.appendChild(e); return;
+    }
+    items.forEach(function(it){
+      var d=daysLeft(it); var end=addMonths(it.date,Number(it.months));
+      var cls= d<0?"bad": d<=30?"warn":"ok";
+      var label= d<0?"切れて"+Math.abs(d)+"日": d===0?"今日まで": d<=30?"あと"+d+"日": "あと"+Math.round(d/30)+"か月";
+      var el=document.createElement("div"); el.className="item";
+      el.innerHTML=
+        '<div><div class="name">'+esc(it.name)+(it.ex?' <span class="example-tag">例</span>':'')+'</div>'+
+        '<div class="sub">'+esc([it.maker,it.model].filter(function(x){return x&&x!=="—";}).join(" ")||"　")+'</div>'+
+        '<div class="sub mono">購入 '+esc(it.date.replace(/-/g,"."))+' → 保証 '+fmt(end)+'まで</div>'+
+        (it.note?'<div class="sub">'+esc(it.note)+'</div>':'')+
+        (it.photo?'<img alt="レシート・保証書" src="'+it.photo+'">':'')+
+        '</div><span class="chip '+cls+'">'+label+'</span>'+
+        '<div class="foot"><span></span><span class="row-actions"><button class="ghost small" data-act="edit" data-id="'+it.id+'">直す</button><button class="ghost small danger" data-act="del" data-id="'+it.id+'">消す</button></span></div>';
+      list.appendChild(el);
+    });
+  }
+
+  /* ---------- form ---------- */
+  var editing=null;
+  function openForm(it){
+    editing=it||null;
+    $("form-title").textContent= it? "登録を直す":"新しく登録";
+    $("f-name").value=it?it.name:""; $("f-maker").value=it&&it.maker!=="—"?it.maker:""; $("f-model").value=it?it.model:"";
+    $("f-date").value=it?it.date:new Date().toISOString().slice(0,10); $("f-months").value=it?String(it.months):"12";
+    $("f-note").value=it?it.note:""; $("f-photo").value=""; pendingPhoto= it?it.photo:"";
+    $("form-card").hidden=false; $("open-add").hidden=true; toast(""); $("f-name").focus();
+  }
+  function closeForm(){ $("form-card").hidden=true; $("open-add").hidden=false; editing=null; }
+  $("open-add").addEventListener("click",function(){openForm(null);});
+  $("f-cancel").addEventListener("click",closeForm);
+
+  var pendingPhoto="";
+  $("f-photo").addEventListener("change",function(){
+    var f=this.files&&this.files[0]; if(!f) return;
+    var img=new Image(); var url=URL.createObjectURL(f);
+    img.onload=function(){
+      var max=900, w=img.width, h=img.height; var r=Math.min(1,max/Math.max(w,h));
+      var c=document.createElement("canvas"); c.width=Math.round(w*r); c.height=Math.round(h*r);
+      c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+      pendingPhoto=c.toDataURL("image/jpeg",0.72); URL.revokeObjectURL(url); toast("写真を読み込みました");
+    };
+    img.onerror=function(){ toast("写真を読み込めませんでした",true); };
+    img.src=url;
+  });
+
+  $("f-save").addEventListener("click",function(){
+    var name=$("f-name").value.trim(); var date=$("f-date").value;
+    if(!name){ toast("品名を入れてください",true); return; }
+    if(!date){ toast("購入日を入れてください",true); return; }
+    var rec={id: editing?editing.id:uid(), name:name, maker:$("f-maker").value.trim()||"—", model:$("f-model").value.trim(),
+             date:date, months:Number($("f-months").value), note:$("f-note").value.trim(), photo:pendingPhoto||"", ex:false};
+    if(editing){ state.items=state.items.map(function(i){return i.id===editing.id?rec:i;}); }
+    else { state.items.push(rec); }
+    save(); render(); closeForm();
+  });
+
+  $("list").addEventListener("click",function(ev){
+    var b=ev.target.closest("button[data-act]"); if(!b) return;
+    var it=state.items.find(function(i){return i.id===b.dataset.id;}); if(!it) return;
+    if(b.dataset.act==="edit"){ openForm(it); window.scrollTo({top:0,behavior:"smooth"}); }
+    if(b.dataset.act==="del"){ if(confirm("「"+it.name+"」を消しますか？")){ state.items=state.items.filter(function(i){return i.id!==it.id;}); save(); render(); } }
+  });
+
+  /* ---------- backup ---------- */
+  var bkToast=$("bk-toast");
+  function bt(msg,err){ bkToast.className="toast"+(err?" err":""); bkToast.textContent=msg; }
+  var downloads=null;
+  function deliver(filename,text,mime){
+    if(downloads){ return downloads.save({filename:filename,data:text}).then(function(){bt("保存しました: "+filename);}).catch(function(){ fallback(text); }); }
+    fallback(text); return Promise.resolve();
+  }
+  function fallback(text){ $("bk-text").value=text; bt("この端末では直接保存できないので、下の欄に出しました。全部コピーしてメモなどに貼り付けて保管してください"); }
+  $("bk-save").addEventListener("click",function(){
+    var real=state.items.filter(function(i){return !i.ex;});
+    deliver("hosho-cho-"+new Date().toISOString().slice(0,10)+".json", JSON.stringify({app:"hosho-cho",v:1,items:real},null,1), "application/json");
+  });
+  $("bk-ics").addEventListener("click",function(){
+    var lines=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//hosho-cho//JP"];
+    state.items.filter(function(i){return !i.ex;}).forEach(function(it){
+      var end=addMonths(it.date,Number(it.months)); var remind=new Date(end); remind.setDate(remind.getDate()-30);
+      var ds=function(d){var p=function(n){return (n<10?"0":"")+n;}; return d.getFullYear()+p(d.getMonth()+1)+p(d.getDate());};
+      lines.push("BEGIN:VEVENT","UID:"+it.id+"@hosho-cho","DTSTART;VALUE=DATE:"+ds(remind),"DTEND;VALUE=DATE:"+ds(remind),
+        "SUMMARY:"+it.name+" の保証が30日後に切れます","DESCRIPTION:保証終了 "+fmt(end),"END:VEVENT");
+    });
+    lines.push("END:VCALENDAR");
+    deliver("hosho-cho.ics", lines.join("\r\n"), "text/calendar");
+  });
+  $("bk-load").addEventListener("click",function(){
+    try{ var d=JSON.parse($("bk-text").value); if(!d||!Array.isArray(d.items)) throw 0;
+      var real=state.items.filter(function(i){return !i.ex;}); var ids={}; real.forEach(function(i){ids[i.id]=1;});
+      d.items.forEach(function(i){ if(!ids[i.id]) real.push(i); });
+      state.items=real; save(); render(); bt(d.items.length+"件を読み込みました"); $("bk-text").value="";
+    }catch(e){ bt("読み込めませんでした。バックアップの中身をそのまま貼り付けてください",true); }
+  });
+  $("bk-clear").addEventListener("click",function(){
+    if(confirm("すべての記録を消します。バックアップは取りましたか？")){ state.items=[]; save(); render(); bt("全部消しました"); }
+  });
+
+  load(); render();
+  if(window.claude&&typeof window.claude.use==="function"){ window.claude.use("downloads").then(function(ns){ downloads=ns||null; }).catch(function(){}); }
+})();
+</script>

@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>あなたのアプリ屋さん</title>
+<meta name="description" content="「こんなアプリがあったら」を、説明するだけで形にする小さなお店。5本は無料。記録はあなたの端末の中にだけ。">
+<meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --bg:#F1F2EE; --surface:#FFFFFF; --surface-2:#F7F8F4;
+    --ink:#1E211C; --muted:#6A6F63; --line:#D7D9D1; --line-strong:#B9BDB1;
+    --accent:#2F5D50; --accent-ink:#FFFFFF; --accent-soft:#E1ECE8;
+    --c1:#2F4C7C; --c2:#C2552A; --c3:#2E7D6B; --c4:#6A3E8F; --c5:#A67C0F;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#171913; --surface:#1F221B; --surface-2:#262A21;
+      --ink:#ECEDE5; --muted:#9AA091; --line:#30342B; --line-strong:#464B3F;
+      --accent:#8CC4B3; --accent-ink:#0E211B; --accent-soft:#233430;
+      --c1:#8FA9D9; --c2:#E8906A; --c3:#7CC4B2; --c4:#B892DA; --c5:#E6C25A;
+      color-scheme:dark;
+    }
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--bg);color:var(--ink);font-family:"Zen Kaku Gothic New",system-ui,-apple-system,"Hiragino Sans",sans-serif;font-size:16px;line-height:1.75;-webkit-text-size-adjust:100%;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  .wrap{max-width:720px;margin-inline:auto;padding-inline:16px;padding-block:32px 80px;display:flex;flex-direction:column;gap:44px}
+  .mono{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
+  a{color:var(--accent);text-underline-offset:3px}
+  a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+  header{display:flex;flex-direction:column;gap:14px}
+  .eyebrow{font-size:12.5px;letter-spacing:.14em;color:var(--muted);font-weight:500}
+  h1{margin:0;font-size:clamp(34px,8vw,48px);line-height:1.1;font-weight:700;letter-spacing:.01em;text-wrap:balance}
+  .thesis{margin:0;font-size:clamp(18px,4.6vw,22px);line-height:1.5;font-weight:500;text-wrap:balance}
+  .thesis b{color:var(--accent)}
+  .lede{margin:0;color:var(--muted);font-size:15px;max-width:60ch}
+
+  h2{margin:0 0 4px;font-size:22px;font-weight:700;letter-spacing:.01em}
+  .sub{margin:0 0 14px;color:var(--muted);font-size:14.5px}
+
+  .apps{display:grid;grid-template-columns:1fr;gap:12px;list-style:none;margin:0;padding:0}
+  .app{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--line-strong);border-radius:12px;padding:16px 18px;display:grid;grid-template-columns:1fr auto;gap:6px 14px;align-items:center}
+  .app.c1{border-left-color:var(--c1)} .app.c2{border-left-color:var(--c2)} .app.c3{border-left-color:var(--c3)} .app.c4{border-left-color:var(--c4)} .app.c5{border-left-color:var(--c5)}
+  .app .name{font-size:19px;font-weight:700}
+  .app .what{font-size:14.5px;color:var(--muted)}
+  .app .who{font-size:13px;color:var(--muted);margin-top:2px}
+  .open{font:inherit;font-weight:700;font-size:15px;padding:12px 18px;border-radius:10px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);text-decoration:none;white-space:nowrap;align-self:center}
+  .open:hover{filter:brightness(1.06)}
+  @media (max-width:440px){.app{grid-template-columns:1fr}.open{justify-self:start}}
+  .howto{margin:14px 0 0;padding:12px 14px;border:1px dashed var(--line-strong);border-radius:10px;font-size:14px;color:var(--muted);background:var(--surface-2)}
+  .howto b{color:var(--ink)}
+
+  .tiers{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media (max-width:520px){.tiers{grid-template-columns:1fr}}
+  .tier{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:8px}
+  .tier.free{border-color:var(--accent)}
+  .tier .tag{font-size:12px;letter-spacing:.12em;color:var(--muted);font-weight:500}
+  .tier .price{font-size:26px;font-weight:700;line-height:1.1}
+  .tier .price small{font-size:14px;font-weight:500;color:var(--muted)}
+  .tier ul{margin:4px 0 0;padding-left:1.2em;font-size:14.5px;color:var(--muted);display:flex;flex-direction:column;gap:3px}
+  .tier ul li b{color:var(--ink);font-weight:500}
+  .cta{font:inherit;font-weight:700;font-size:15px;padding:12px 16px;border-radius:10px;border:1px solid var(--line-strong);background:var(--surface-2);color:var(--ink);text-decoration:none;text-align:center;margin-top:auto}
+  .cta.primary{border-color:var(--accent);background:var(--accent);color:var(--accent-ink)}
+
+  .ask{background:var(--accent-soft);border:1px solid var(--accent);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:8px}
+  .ask p{margin:0}
+  .ask .big{font-size:20px;font-weight:700;line-height:1.35;text-wrap:balance}
+
+  .promise{display:grid;grid-template-columns:1fr;gap:10px;margin:0;padding:0;list-style:none}
+  .promise li{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;font-size:15px}
+  .promise li::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--accent);margin-top:.55em}
+  .promise b{font-weight:700}
+
+  .contact{border-left:4px solid var(--line-strong);padding:12px 16px;background:var(--surface);border-radius:0 10px 10px 0;font-size:15px;display:flex;flex-direction:column;gap:6px}
+  .contact .todo{color:var(--muted);font-size:13.5px}
+
+  footer{border-top:1px solid var(--line);padding-top:18px;color:var(--muted);font-size:13.5px;display:flex;flex-direction:column;gap:8px}
+  footer b{color:var(--ink);font-weight:500}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">自分では作れないけど、こんなアプリがあったら</div>
+    <h1>あなたのアプリ屋さん</h1>
+    <p class="thesis">アプリは<b>「作る」</b>ものじゃなくて、<b>「頼む」</b>ものでいい。説明するだけで、翌日届く。</p>
+    <p class="lede">ここにある5本は、実際に「こんなアプリが欲しい」と書かれていた願いから作りました。全部無料です。記録はあなたの端末の中にだけ残り、どこにも送られません。</p>
+  </header>
+
+  <section aria-labelledby="h-apps">
+    <h2 id="h-apps">5本、そのまま使えます</h2>
+    <p class="sub">押すと開きます。アカウントもインストールも要りません。</p>
+    <ul class="apps">
+      <li class="app c1"><div><div class="name">ほしょう帳</div><div class="what">家電の保証がいつ切れるか、開いた瞬間に分かる。メーカーを問わず1か所に。</div><div class="who">こんな人に：保証書がどこにあるか分からなくなる家</div></div><a class="open" href="apps/hosho-cho.html">開く</a></li>
+      <li class="app c2"><div><div class="name">どこしまった帳</div><div class="what">しまった場所を一言残しておく。探すときは名前を打つだけ。</div><div class="who">こんな人に：「あれどこ？」が毎週ある家</div></div><a class="open" href="apps/doko-cho.html">開く</a></li>
+      <li class="app c3"><div><div class="name">きげん帳</div><div class="what">冷蔵庫と食品庫の期限を3秒で入れて、近いものが上に出る。食べたら1回押すだけ。</div><div class="who">こんな人に：バーコードも写真も面倒な人</div></div><a class="open" href="apps/kigen-cho.html">開く</a></li>
+      <li class="app c4"><div><div class="name">しゅみ帳</div><div class="what">趣味ごとに記録する項目を自分で決める。釣りも鉢も推しも1冊で、集計は勝手に出る。</div><div class="who">こんな人に：専用アプリだと項目が合わない人</div></div><a class="open" href="apps/shumi-cho.html">開く</a></li>
+      <li class="app c5"><div><div class="name">きょうのひとこと帳</div><div class="what">高齢の親の「今日できたこと」を家族が一行残す。薬や血圧は扱わない。文字は大きく、操作は1つ。</div><div class="who">こんな人に：離れて暮らす親のいいことを残したい家族</div></div><a class="open" href="apps/kyo-no-hitokoto.html">開く</a></li>
+    </ul>
+    <p class="howto"><b>アプリのように使うには：</b>開いたページで、ブラウザのメニューから「ホーム画面に追加」を押してください。次からはホーム画面のアイコンから開けます。</p>
+  </section>
+
+  <section aria-labelledby="h-tiers">
+    <h2 id="h-tiers">無料と、有料の線</h2>
+    <p class="sub">無料版は制限版ではありません。全部使えます。</p>
+    <div class="tiers">
+      <div class="tier free">
+        <div class="tag">そのまま使う</div>
+        <div class="price">無料</div>
+        <ul>
+          <li><b>5本すべて、全機能</b></li>
+          <li>記録は端末の中にだけ。アカウント不要</li>
+          <li>バックアップと復元つき</li>
+          <li>ずっと無料。あとから有料になることはありません</li>
+        </ul>
+        <a class="cta" href="#h-apps">上の5本を開く</a>
+      </div>
+      <div class="tier">
+        <div class="tag">あなた専用に直す</div>
+        <div class="price">9,800円<small>〜（内容によって）</small></div>
+        <ul>
+          <li><b>項目を、あなたの使い方に合わせて足す・変える</b></li>
+          <li>名前入り、色、画面の並びをあなた用に</li>
+          <li>「こういうアプリが欲しい」を新しく1本</li>
+          <li>できたものは、あなたの端末の中で動きます。預かりません</li>
+        </ul>
+        <a class="cta primary" href="#h-contact">相談する（無料）</a>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-ask">
+    <div class="ask">
+      <p class="eyebrow" id="h-ask">教えてください</p>
+      <p class="big">「こんなアプリがあったらいいのに」。あなたのそれを、聞かせてください。</p>
+      <p>釣りの記録でも、親の見守りでも、趣味の道具の管理でも。ここにある5本も、そうやって書かれた願いから作りました。作れそうなものは、無料で作って、ここに並べます。</p>
+      <a class="cta primary" href="#h-contact" style="align-self:flex-start">願いを送る</a>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-promise">
+    <h2 id="h-promise">預かりません</h2>
+    <p class="sub">ここにあるアプリの約束です。</p>
+    <ul class="promise">
+      <li><span><b>記録はあなたの端末の中にだけ。</b>こちらのサーバーには何も送られず、こちらから見ることもできません。</span></li>
+      <li><span><b>だから、端末を替えたりブラウザのデータを消したりすると、記録も消えます。</b>各アプリに「バックアップ」があります。端末を替える前に、必ず。</span></li>
+      <li><span><b>薬・血圧・お金・法律の判断に使うものは作りません。</b>間違えたときの損害が大きすぎるからです。</span></li>
+      <li><span><b>広告はありません。</b>無料版で稼ぐ仕組みはなく、「あなた専用に直す」だけが有料です。</span></li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="h-contact">
+    <h2 id="h-contact">連絡先</h2>
+    <div class="contact">
+      <!-- TODO(社長): 連絡先が決まったら、この下の2行を差し替える。LINE公式 / メール / フォームのどれか1つ。 -->
+      <div>連絡先は準備中です。数日中にここに載せます。</div>
+      <div class="todo">「あなた専用に直す」「願いを送る」は、ここが決まったら受け付けを始めます。</div>
+    </div>
+  </section>
+
+  <footer>
+    <div><b>あなたのアプリ屋さん</b>は、埼玉県朝霞市の小さな会社が、本業のかたわらでやっている実験です。</div>
+    <div>作っているのは、自分の会社の仕事をAIで組み替えてきた47歳の経営者と、AIです。アプリを作る会社ではなく、「あったらいいのに」を形にしたい人のためのお店。</div>
+    <div class="mono">2026</div>
+  </footer>
+
+</div>
+</body>
+</html>
