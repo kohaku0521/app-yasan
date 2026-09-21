@@ -61,8 +61,7 @@
   .tier{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:8px}
   .tier.free{border-color:var(--accent)}
   .tier .tag{font-size:12px;letter-spacing:.12em;color:var(--muted);font-weight:500}
-  .tier .price{font-size:26px;font-weight:700;line-height:1.1}
-  .tier .price small{font-size:14px;font-weight:500;color:var(--muted)}
+
   .tier ul{margin:4px 0 0;padding-left:1.2em;font-size:14.5px;color:var(--muted);display:flex;flex-direction:column;gap:3px}
   .tier ul li b{color:var(--ink);font-weight:500}
   .cta{font:inherit;font-weight:700;font-size:15px;padding:12px 16px;border-radius:10px;border:1px solid var(--line-strong);background:var(--surface-2);color:var(--ink);text-decoration:none;text-align:center;margin-top:auto}
@@ -108,32 +107,17 @@
     <p class="howto"><b>アプリのように使うには：</b>開いたページで、ブラウザのメニューから「ホーム画面に追加」を押してください。次からはホーム画面のアイコンから開けます。</p>
   </section>
 
-  <section aria-labelledby="h-tiers">
-    <h2 id="h-tiers">無料と、有料の線</h2>
-    <p class="sub">無料版は制限版ではありません。全部使えます。</p>
-    <div class="tiers">
-      <div class="tier free">
-        <div class="tag">そのまま使う</div>
-        <div class="price">無料</div>
-        <ul>
-          <li><b>5本すべて、全機能</b></li>
-          <li>記録は端末の中にだけ。アカウント不要</li>
-          <li>バックアップと復元つき</li>
-          <li>ずっと無料。あとから有料になることはありません</li>
-        </ul>
-        <a class="cta" href="#h-apps">上の5本を開く</a>
-      </div>
-      <div class="tier">
-        <div class="tag">あなた専用に直す</div>
-        <div class="price">9,800円<small>〜（内容によって）</small></div>
-        <ul>
-          <li><b>項目を、あなたの使い方に合わせて足す・変える</b></li>
-          <li>名前入り、色、画面の並びをあなた用に</li>
-          <li>「こういうアプリが欲しい」を新しく1本</li>
-          <li>できたものは、あなたの端末の中で動きます。預かりません</li>
-        </ul>
-        <a class="cta primary" href="#h-contact">相談する（無料）</a>
-      </div>
+  <section aria-labelledby="h-free">
+    <h2 id="h-free">全部、無料です</h2>
+    <p class="sub">しばらくはこのまま、試しに使ってもらいます。</p>
+    <div class="tier free">
+      <ul>
+        <li><b>5本すべて、全機能。</b>制限版ではありません</li>
+        <li>アカウント不要。記録は端末の中にだけ</li>
+        <li>広告はありません</li>
+        <li><b>使った感想を聞かせてください。</b>「ここが合わない」が、次の1本になります</li>
+      </ul>
+      <a class="cta primary" href="#h-contact" style="margin-top:8px">感想・願いを送る</a>
     </div>
   </section>
 
@@ -153,7 +137,7 @@
       <li><span><b>記録はあなたの端末の中にだけ。</b>こちらのサーバーには何も送られず、こちらから見ることもできません。</span></li>
       <li><span><b>だから、端末を替えたりブラウザのデータを消したりすると、記録も消えます。</b>各アプリに「バックアップ」があります。端末を替える前に、必ず。</span></li>
       <li><span><b>薬・血圧・お金・法律の判断に使うものは作りません。</b>間違えたときの損害が大きすぎるからです。</span></li>
-      <li><span><b>広告はありません。</b>無料版で稼ぐ仕組みはなく、「あなた専用に直す」だけが有料です。</span></li>
+      <li><span><b>広告はありません。</b>今は全部無料で、稼ぐ仕組みは入れていません。</span></li>
     </ul>
   </section>
 
@@ -162,7 +146,7 @@
     <div class="contact">
       <!-- TODO(社長): 連絡先が決まったら、この下の2行を差し替える。LINE公式 / メール / フォームのどれか1つ。 -->
       <div>連絡先は準備中です。数日中にここに載せます。</div>
-      <div class="todo">「あなた専用に直す」「願いを送る」は、ここが決まったら受け付けを始めます。</div>
+      <div class="todo">感想と「こんなアプリが欲しい」は、ここが決まったら受け付けを始めます。</div>
     </div>
   </section>
 
