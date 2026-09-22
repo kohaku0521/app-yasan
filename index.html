@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>つくったもの</title>
-<meta name="description" content="「こんなアプリがあったら」を、説明するだけで形にする小さなお店。5本は無料。記録はあなたの端末の中にだけ。">
+<title>菊池隆弘</title>
+<meta name="description" content="埼玉県朝霞市で解体の仕事をしています。25年、47歳。会社の仕事をAIでどこまで組み替えられるか試しています。うまくいかなかったことも数字で書きます。">
 <meta name="color-scheme" content="light dark">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,6 +35,16 @@
   a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 
   header{display:flex;flex-direction:column;gap:14px}
+  .me{display:flex;align-items:center;gap:16px}
+  .me img{width:84px;height:84px;border-radius:50%;object-fit:cover;border:2px solid var(--line-strong);flex:none;background:var(--surface-2)}
+  .me .who-i-am{display:flex;flex-direction:column;gap:2px;min-width:0}
+  .me .nm{font-size:clamp(26px,6.4vw,34px);font-weight:700;line-height:1.15;letter-spacing:.01em}
+  .me .role{font-size:13.5px;color:var(--muted);letter-spacing:.06em}
+  .facts{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+  .facts li{display:flex;gap:12px;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:10px}
+  .facts .k{flex:none;width:8.5em;color:var(--muted);font-size:13.5px}
+  .facts .v{min-width:0}
+  .links{display:flex;flex-wrap:wrap;gap:10px}
   .eyebrow{font-size:12.5px;letter-spacing:.14em;color:var(--muted);font-weight:500}
   h1{margin:0;font-size:clamp(34px,8vw,48px);line-height:1.1;font-weight:700;letter-spacing:.01em;text-wrap:balance}
   .thesis{margin:0;font-size:clamp(18px,4.6vw,22px);line-height:1.5;font-weight:500;text-wrap:balance}
@@ -93,15 +103,33 @@
 <div class="wrap">
 
   <header>
-    <div class="eyebrow">埼玉県朝霞市／解体業／47歳</div>
-    <h1>つくったもの</h1>
-    <p class="thesis">会社の仕事をAIで組み替えてきました。<b>その途中で作った小さな道具</b>を、ここに置いています。</p>
-    <p class="lede">5本あります。全部無料で、アカウントもインストールも要りません。記録はあなたの端末の中にだけ残ります。使ってもらえたら嬉しいですが、見ていくだけでも構いません。</p>
+    <div class="me">
+      <img src="me.jpg" alt="菊池隆弘" onerror="this.style.display='none'">
+      <div class="who-i-am">
+        <div class="nm">菊池 隆弘</div>
+        <div class="role">埼玉県朝霞市／解体業25年／47歳</div>
+      </div>
+    </div>
+    <p class="thesis">会社の仕事を、AIでどこまで組み替えられるか試しています。<b>うまくいかなかったことも、数字で書きます。</b></p>
+    <p class="lede">現場に25年います。事務が回らなくなって、2年前からAIを使い始めました。社内の仕事はずいぶん楽になりました。外に向けたことは、ほとんど失敗しています。その記録を残している途中です。</p>
   </header>
 
+  <section aria-labelledby="h-me">
+    <h2 id="h-me">やってきたこと</h2>
+    <p class="sub">数字はそのまま書きます。</p>
+    <ul class="facts">
+      <li><span class="k">本業</span><span class="v">解体と外構。埼玉県朝霞市。25年目</span></li>
+      <li><span class="k">社内の仕事</span><span class="v"><b>AIに任せて、うまくいった。</b>見積もりの下書き、日報、役所に出す文章。社内用の業務アプリも、説明したら形になった。プログラムは一行も書いていない</span></li>
+      <li><span class="k">ブログ</span><span class="v">43本書いて、直近30日で読んだ人は<b>7人</b></span></li>
+      <li><span class="k">紹介メディア</span><span class="v">2年やって売上<b>1万円</b>。サーバー代を入れると赤字。今月たたんだ</span></li>
+      <li><span class="k">動画</span><span class="v">台本も音声も自動で作るチャンネルを3つ。動いてはいる。お金になるのはまだ先</span></li>
+      <li><span class="k">分かったこと</span><span class="v"><b>AIは「作る」のは速い。「届ける」のは別の仕事だった。</b>作れる量が10倍になっても、読まれる量は増えなかった</span></li>
+    </ul>
+  </section>
+
   <section aria-labelledby="h-apps">
-    <h2 id="h-apps">置いてある5本</h2>
-    <p class="sub">押すと開きます。</p>
+    <h2 id="h-apps">つくったもの</h2>
+    <p class="sub">順番を変えて、困りごとから作ってみた5本です。押すと開きます。無料で、登録も要りません。<b>使ってください、とは言いません。</b>いま何をしているかの実物です。</p>
     <ul class="apps">
       <li class="app c1"><div><div class="name">ほしょう帳</div><div class="what">家電の保証がいつ切れるか、開いた瞬間に分かる。メーカーを問わず1か所に。</div><div class="who">こんな人に：保証書がどこにあるか分からなくなる家</div></div><a class="open" href="apps/hosho-cho.html">開く</a></li>
       <li class="app c2"><div><div class="name">どこしまった帳</div><div class="what">しまった場所を一言残しておく。探すときは名前を打つだけ。</div><div class="who">こんな人に：「あれどこ？」が毎週ある家</div></div><a class="open" href="apps/doko-cho.html">開く</a></li>
@@ -124,16 +152,16 @@
   </section>
 
   <section aria-labelledby="h-contact">
-    <h2 id="h-contact">使ってみて、何か思ったら</h2>
+    <h2 id="h-contact">話しかけてもらえれば</h2>
     <div class="contact">
-      <div>「ここが惜しい」「こういうのが欲しかった」があれば、聞かせてもらえると嬉しいです。<b>名前も連絡先も要りません。</b>返事がいる方だけ、連絡先を書いてください。</div>
+      <div>使ってみて「ここが惜しい」と思ったら、聞かせてもらえると嬉しいです。AIの使い方で聞きたいことがあれば、答えられる範囲で答えます。<b>名前も連絡先も要りません。</b>返事がいる方だけ、連絡先を書いてください。</div>
       <a class="cta primary" href="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=DQSIkWdsW0yxEjajBLZtrQAAAAAAAAAAAAO__WdxdktUOUhDTVdCT0IxSEpLMThRVEdXU1cxU1I4MS4u" target="_blank" rel="noopener" style="align-self:flex-start;margin-top:6px">一言だけ送る（1分）</a>
       <div class="todo">届いた言葉は、次に何を作るか・どこを直すかを決めるのに使います。それ以外には使いません。</div>
     </div>
   </section>
 
   <footer>
-    <div>埼玉県朝霞市で解体の仕事をしています。菊池です。25年、47歳。</div>
+    <div>菊池隆弘。埼玉県朝霞市で解体の仕事をしています。25年、47歳。</div>
     <div>本業のかたわら、自分の会社の仕事をAIで組み替えてきました。ここにあるのは、その途中で作ったものです。売り物ではありません。</div>
     <div class="mono">2026</div>
   </footer>
