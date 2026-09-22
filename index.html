@@ -73,7 +73,8 @@
   .ask .wishes{margin:4px 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
   .ask .wishes li{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;font-size:15px;line-height:1.6}
   .ask .wishes li::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:.6em}
-  .ask .wishes b{display:block;font-size:16px}
+  .ask .wishes b{display:block;font-size:16px;margin-bottom:2px}
+  .ask .wishes span{min-width:0}
 
   .promise{display:grid;grid-template-columns:1fr;gap:10px;margin:0;padding:0;list-style:none}
   .promise li{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;font-size:15px}
@@ -103,9 +104,9 @@
       <p class="eyebrow" id="h-ask">教えてください</p>
       <p class="big">「こんなアプリがあったらいいのに」だけじゃなくて。</p>
       <ul class="wishes">
-        <li><b>こんなアプリが欲しい。</b>釣りの記録でも、親の見守りでも、趣味の道具の管理でも</li>
-        <li><b>今使っているアプリを、こんな風に使えたら。</b>「家計簿を、うちの決め方で分けたい」「メモを、日付じゃなく場所で探したい」</li>
-        <li><b>今使っているアプリに、この機能があれば。</b>「あの一覧に、あと1列」「あの通知を、前の日の夜に」</li>
+        <li><span><b>こんなアプリが欲しい。</b>釣りの記録でも、親の見守りでも、趣味の道具の管理でも</span></li>
+        <li><span><b>今使っているアプリを、こんな風に使えたら。</b>「家計簿を、うちの決め方で分けたい」「メモを、日付じゃなく場所で探したい」</span></li>
+        <li><span><b>今使っているアプリに、この機能があれば。</b>「あの一覧に、あと1列」「あの通知を、前の日の夜に」</span></li>
       </ul>
       <p>ここにある5本も、そうやって書かれた願いから作りました。<b>惜しいところ、足りないところ、そのままの言葉で。</b>作れそうなものは、無料で作って、ここに並べます。</p>
       <a class="cta primary" href="#h-contact" style="align-self:flex-start">感想・願いを送る</a>
